@@ -1,9 +1,8 @@
 from typing import Any, Dict, Optional
 
 import requests
+from authlib.jose import JsonWebKey, jwk
 from fastapi.exceptions import HTTPException
-from jose import jwk
-from jose.backends.base import Key
 from pydantic import BaseModel, Field
 from starlette import status
 
@@ -20,8 +19,8 @@ def get_issuer(domain: str) -> str:
 
 
 class JWKS(BaseJWKS):
-    def _construct(self, jwks: Dict[str, Any]) -> Dict[str, Key]:
-        return {_jwk["kid"]: jwk.construct(_jwk) for _jwk in jwks.get("keys", [])}
+    def _construct(self, jwks: Dict[str, Any]) -> Dict[str, JsonWebKey]:
+        return {_jwk["kid"]: jwk.loads(_jwk) for _jwk in jwks.get("keys", [])}
 
 
 class Auth0(ScopedAuth):

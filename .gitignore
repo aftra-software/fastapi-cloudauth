@@ -12,3 +12,4 @@ poetry.lock
 scripts/load_env.sh
 credentials/*
 base64-credential
+.envrc

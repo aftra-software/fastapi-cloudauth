@@ -8,18 +8,18 @@ fastapi-cloudauth standardizes and simplifies the integration between FastAPI an
 
 ## Features
 
-* [X] Verify access/id token: standard JWT validation (signature, expiration), token audience claims, etc.
-* [X] Verify permissions based on scope (or groups) within access token and extract user info 
-* [X] Get the detail of login user info (name, email, etc.) within ID token
-* [X] Dependency injection for verification/getting user, powered by [FastAPI](https://github.com/tiangolo/fastapi)
-* [X] Support for:
-    * [X] [AWS Cognito](https://aws.amazon.com/jp/cognito/)
-    * [X] [Auth0](https://auth0.com/jp/)
-    * [x] [Firebase Auth](https://firebase.google.com/docs/auth) (Only ID token)
+-   [x] Verify access/id token: standard JWT validation (signature, expiration), token audience claims, etc.
+-   [x] Verify permissions based on scope (or groups) within access token and extract user info
+-   [x] Get the detail of login user info (name, email, etc.) within ID token
+-   [x] Dependency injection for verification/getting user, powered by [FastAPI](https://github.com/tiangolo/fastapi)
+-   [x] Support for:
+    -   [x] [AWS Cognito](https://aws.amazon.com/jp/cognito/)
+    -   [x] [Auth0](https://auth0.com/jp/)
+    -   [x] [Firebase Auth](https://firebase.google.com/docs/auth) (Only ID token)
 
 ## Requirements
 
-Python 3.6+
+Python 3.8+
 
 ## Install
 
@@ -31,15 +31,15 @@ $ pip install fastapi-cloudauth
 
 ### Pre-requirements
 
-* Check `region`, `userPoolID` and `AppClientID` of AWS Cognito that you manage to
-* Create a user's assigned `read:users` permission in AWS Cognito 
-* Get Access/ID token for the created user
+-   Check `region`, `userPoolID` and `AppClientID` of AWS Cognito that you manage to
+-   Create a user's assigned `read:users` permission in AWS Cognito
+-   Get Access/ID token for the created user
 
 NOTE: access token is valid for verification, scope-based authentication, and getting user info (optional). ID token is valid for verification and getting full user info from claims.
 
 ### Create it
 
-Create a *main.py* file with the following content:
+Create a _main.py_ file with the following content:
 
 ```python3
 import os
@@ -49,7 +49,7 @@ from fastapi_cloudauth.cognito import Cognito, CognitoCurrentUser, CognitoClaims
 
 app = FastAPI()
 auth = Cognito(
-    region=os.environ["REGION"], 
+    region=os.environ["REGION"],
     userPoolId=os.environ["USERPOOLID"],
     client_id=os.environ["APPCLIENTID"]
 )
@@ -71,7 +71,7 @@ def secure_access(current_user: AccessUser = Depends(auth.claim(AccessUser))):
 
 
 get_current_user = CognitoCurrentUser(
-    region=os.environ["REGION"], 
+    region=os.environ["REGION"],
     userPoolId=os.environ["USERPOOLID"],
     client_id=os.environ["APPCLIENTID"]
 )
@@ -106,14 +106,13 @@ You can supply a token and try the endpoint interactively.
 
 ![Swagger UI](https://raw.githubusercontent.com/tokusumi/fastapi-cloudauth/master/docs/src/authorize_in_doc.jpg)
 
-
 ## Example (Auth0)
 
 ### Pre-requirement
 
-* Check `domain`, `customAPI` (Audience) and `ClientID` of Auth0 that you manage to
-* Create a user assigned `read:users` permission in Auth0 
-* Get Access/ID token for the created user
+-   Check `domain`, `customAPI` (Audience) and `ClientID` of Auth0 that you manage to
+-   Create a user assigned `read:users` permission in Auth0
+-   Get Access/ID token for the created user
 
 ### Create it
 
@@ -160,13 +159,12 @@ def secure_user(current_user: Auth0Claims = Depends(get_current_user)):
 
 Try to run the server and see interactive UI in the same way.
 
-
 ## Example (Firebase Authentication)
 
 ### Pre-requirement
 
-* Create a user in Firebase Authentication and get `project ID`
-* Get ID token for the created user
+-   Create a user in Firebase Authentication and get `project ID`
+-   Get ID token for the created user
 
 ### Create it
 
@@ -201,18 +199,18 @@ For Auth0, the ID token contains the following extra values (Ref at [Auth0 offic
 
 ```json
 {
-  "iss": "http://YOUR_DOMAIN/",
-  "sub": "auth0|123456",
-  "aud": "YOUR_CLIENT_ID",
-  "exp": 1311281970,
-  "iat": 1311280970,
-  "name": "Jane Doe",
-  "given_name": "Jane",
-  "family_name": "Doe",
-  "gender": "female",
-  "birthdate": "0000-10-31",
-  "email": "janedoe@example.com",
-  "picture": "http://example.com/janedoe/me.jpg"
+    "iss": "http://YOUR_DOMAIN/",
+    "sub": "auth0|123456",
+    "aud": "YOUR_CLIENT_ID",
+    "exp": 1311281970,
+    "iat": 1311280970,
+    "name": "Jane Doe",
+    "given_name": "Jane",
+    "family_name": "Doe",
+    "gender": "female",
+    "birthdate": "0000-10-31",
+    "email": "janedoe@example.com",
+    "picture": "http://example.com/janedoe/me.jpg"
 }
 ```
 
@@ -253,7 +251,7 @@ get_raw_info = get_current_user.claim(None)
 
 @app.get("/new/")
 async def raw_detail(user = Depends(get_raw_info)):
-    # user has all items (ex. iss, sub, aud, exp, ... it depends on passed token) 
+    # user has all items (ex. iss, sub, aud, exp, ... it depends on passed token)
     return f"Hello, {user.get('sub')}"
 ```
 
@@ -263,8 +261,8 @@ Advanced user-SCOPE verification to protect your API.
 
 Supports:
 
-- all (default): required all scopes you set
-- any: At least one of the configured scopes is required
+-   all (default): required all scopes you set
+-   any: At least one of the configured scopes is required
 
 Use as (`auth` is this instanse and `app` is fastapi.FastAPI instanse):
 
